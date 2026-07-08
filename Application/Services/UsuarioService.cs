@@ -3,7 +3,7 @@ using FCG.Users.Application.Interfaces.Repository;
 using FCG.Users.Domain.Entities;
 using FCG.Contracts;
 using FCG.Contracts.Events;
-using FCG.Users.Tests.Validators;
+using FCG.Users.Application.Validators;
 using MassTransit;
 
 namespace FCG.Users.Application.Services

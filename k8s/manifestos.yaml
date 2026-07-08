@@ -14,8 +14,7 @@ metadata:
   namespace: default
 type: Opaque
 stringData:
-  # Garanta que o nome aqui combine exatamente com o que a UsersAPI lê no seu DbContext
-  ConnectionStrings__UsersConnection: "Server=sqlserver-service;Database=Db_Usuarios;User Id=sa;Password=SuaSenhaForte123!;TrustServerCertificate=True;"
+  connection-string: "Server=sqlserver-service;Database=Db_Usuarios;User Id=sa;Password=SuaSenhaForte123!;TrustServerCertificate=True;"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,11 +37,15 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        env:
+        - name: ConnectionStrings__UsuariosConnection
+          valueFrom:
+            secretKeyRef:
+              name: users-secret
+              key: connection-string
         envFrom:
         - configMapRef:
             name: users-config
-        - secretRef:
-            name: users-secret
 ---
 apiVersion: v1
 kind: Service
