@@ -1,10 +1,9 @@
 ﻿using FCG.Users.Application.DTOs;
 using FCG.Users.Application.Interfaces.Repository;
 using FCG.Users.Domain.Entities;
-using FCG.Contracts;
-using FCG.Contracts.Events;
 using FCG.Users.Application.Validators;
 using MassTransit;
+using FCG.Application.Events;
 
 namespace FCG.Users.Application.Services
 {

@@ -20,8 +20,6 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Host.UseSerilog();
-
 // Configurando o EntityFramework, para se comunicar com o banco de dados e realizar as migrations
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -83,9 +81,14 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
+    
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    c.IncludeXmlComments(xmlPath);
+    
+    if (File.Exists(xmlPath))
+    {
+        c.IncludeXmlComments(xmlPath);
+    }
 
 });
 
@@ -97,18 +100,35 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+//builder.Services.AddMassTransit(busRegistration =>
+//{
+//    busRegistration.UsingRabbitMq((context, cfg) => {
+
+//        //var rabbitHost = builder.Configuration["RabbitMq:Host"] ?? "rabbitmq-service";
+
+//        //cfg.Host(rabbitHost, "/", hostConfigurator =>
+//        cfg.Host("localhost", "/", hostConfigurator => 
+//        {
+//            hostConfigurator.Username("guest");
+//            hostConfigurator.Password("guest");
+//        });
+
+//        cfg.ConfigureEndpoints(context);
+//    });
+//});
+
 builder.Services.AddMassTransit(busRegistration =>
 {
-    busRegistration.UsingRabbitMq((context, cfg) => {
-
-        // Tenta ler do appsettings/Kubernetes. Se não achar, usa o fallback seguro
-        var rabbitHost = builder.Configuration["RabbitMq:Host"] ?? "rabbitmq-service";
-
-        cfg.Host(rabbitHost, "/", hostConfigurator =>
+    busRegistration.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("localhost", "/", hostConfigurator =>
         {
             hostConfigurator.Username("guest");
             hostConfigurator.Password("guest");
         });
+
+        cfg.UseRawJsonSerializer();
+        cfg.ConfigureEndpoints(context);
     });
 });
 
