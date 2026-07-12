@@ -9,6 +9,17 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Infrastructure\Messaging\**" />
+	  <Compile Remove="Infrastructure\Security\**" />
+	  <Content Remove="Infrastructure\Messaging\**" />
+	  <Content Remove="Infrastructure\Security\**" />
+	  <EmbeddedResource Remove="Infrastructure\Messaging\**" />
+	  <EmbeddedResource Remove="Infrastructure\Security\**" />
+	  <None Remove="Infrastructure\Messaging\**" />
+	  <None Remove="Infrastructure\Security\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="MassTransit" Version="8.2.5" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
@@ -20,11 +31,6 @@
 		</PackageReference>
 		<PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Infrastructure\Messaging\" />
-		<Folder Include="Infrastructure\Security\" />
 	</ItemGroup>
 
 </Project>
