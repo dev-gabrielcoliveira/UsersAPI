@@ -1,10 +1,10 @@
-# FCG.UsersAPI
+# UsersAPI
 
 Microsserviço responsável pelo gerenciamento de usuários da plataforma FIAP Cloud Games (FCG).
 
 ## Sobre o projeto
 
-O FCG.UsersAPI é responsável pelo cadastro, autenticação e autorização dos usuários da plataforma.
+O UsersAPI é responsável pelo cadastro, autenticação e autorização dos usuários da plataforma.
 
 O serviço foi desenvolvido seguindo uma arquitetura de microsserviços, permitindo evolução independente dos componentes e comunicação assíncrona através de eventos.
 
@@ -56,12 +56,13 @@ Após o cadastro de um usuário, o serviço publica o evento:
 
 Fluxo:
 
+```text
 UsersAPI
-|
-| UserCreatedEvent
-↓
+    |
+    | UserCreatedEvent
+    ↓
 RabbitMQ
-↓
+    ↓
 NotificationsAPI
 
 O evento é consumido pelo NotificationsAPI para simular o envio de e-mail de boas-vindas ao usuário cadastrado.
