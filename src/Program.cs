@@ -54,7 +54,7 @@ builder.Services.AddAuthorization(options =>
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Api de Usuários", Version = "v1" });
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Api de Usuï¿½rios", Version = "v1" });
 
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -63,7 +63,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Digite 'Bearer {seu_token}' para autenticação"
+        Description = "Digite 'Bearer {seu_token}' para autenticaï¿½ï¿½o"
     });
 
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
@@ -100,28 +100,13 @@ builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-//builder.Services.AddMassTransit(busRegistration =>
-//{
-//    busRegistration.UsingRabbitMq((context, cfg) => {
-
-//        //var rabbitHost = builder.Configuration["RabbitMq:Host"] ?? "rabbitmq-service";
-
-//        //cfg.Host(rabbitHost, "/", hostConfigurator =>
-//        cfg.Host("localhost", "/", hostConfigurator => 
-//        {
-//            hostConfigurator.Username("guest");
-//            hostConfigurator.Password("guest");
-//        });
-
-//        cfg.ConfigureEndpoints(context);
-//    });
-//});
-
 builder.Services.AddMassTransit(busRegistration =>
 {
     busRegistration.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host("localhost", "/", hostConfigurator =>
+        var rabbitHost = builder.Configuration["RabbitMq:Host"] ?? "localhost";
+
+        cfg.Host(rabbitHost, "/", hostConfigurator =>
         {
             hostConfigurator.Username("guest");
             hostConfigurator.Password("guest");

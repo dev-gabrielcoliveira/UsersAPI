@@ -19,12 +19,20 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+
         env:
         - name: ConnectionStrings__UsuariosConnection
           valueFrom:
             secretKeyRef:
               name: users-secret
               key: connection-string
+
+        - name: Jwt__Key
+          valueFrom:
+            secretKeyRef:
+              name: users-secret
+              key: jwt-key
+
         envFrom:
         - configMapRef:
             name: users-config
