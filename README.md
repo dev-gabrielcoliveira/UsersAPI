@@ -64,6 +64,7 @@ UsersAPI
 RabbitMQ
     ↓
 NotificationsAPI
+```
 
 O evento é consumido pelo NotificationsAPI para simular o envio de e-mail de boas-vindas ao usuário cadastrado.
 
