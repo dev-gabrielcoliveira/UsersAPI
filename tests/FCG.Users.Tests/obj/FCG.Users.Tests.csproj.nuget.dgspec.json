@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Entrega\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj": {}
+    "C:\\TechChallenge\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Entrega\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj": {
+    "C:\\TechChallenge\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Entrega\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj",
+        "projectUniqueName": "C:\\TechChallenge\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj",
         "projectName": "FCG.Users.Tests",
-        "projectPath": "C:\\Entrega\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj",
+        "projectPath": "C:\\TechChallenge\\UsersAPI\\tests\\FCG.Users.Tests\\FCG.Users.Tests.csproj",
         "packagesPath": "C:\\Users\\GABRIEL\\.nuget\\packages\\",
-        "outputPath": "C:\\Entrega\\UsersAPI\\tests\\FCG.Users.Tests\\obj\\",
+        "outputPath": "C:\\TechChallenge\\UsersAPI\\tests\\FCG.Users.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

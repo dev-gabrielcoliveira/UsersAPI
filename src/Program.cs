@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Reflection;
 using System.Text;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -118,7 +119,9 @@ builder.Services.AddMassTransit(busRegistration =>
 });
 
 var app = builder.Build();
-
+// Captura todas requisições que entram na API
+app.UseHttpMetrics();
+// Migrations automática
 using (var scope = app.Services.CreateScope())
 {
     try
@@ -131,15 +134,15 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Erro ao rodar migrations: {ex.Message}");
     }
 }
-
+// Padrão do ASP.NET (Swagger, Redirecionamento HTTPS, Auth, etc)
 app.UseSwagger();
 app.UseSwaggerUI();
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
+// Mapeamento dos controllers/endpoints normais da sua API
 app.MapControllers();
+// Mapeamento do endpoint que o prometheus vai espiar (ex: /metrics)
+app.MapMetrics();
 
 app.Run();
