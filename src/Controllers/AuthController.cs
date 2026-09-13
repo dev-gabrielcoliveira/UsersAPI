@@ -34,12 +34,12 @@ namespace FCG.Users.Controllers
         /// <response code="200">Autenticação realizada com sucesso</response>
         /// <response code="401">Credenciais inválidas</response>
         [HttpPost]
-        public IActionResult Login([FromQuery] string email, string senha, string papel)
+        public async Task<IActionResult> Login([FromQuery] string email, string senha, string papel)
         {
 
             _logger.LogInformation("Tentativa de login para o email {Email}", email);
             // Para autenticar precisa de um usuário ativo que esteja cadastrado no banco de dados.
-            var usuario = _usuarioService.ObterPorEmail(email);
+            var usuario = await _usuarioService.ObterPorEmail(email);
 
             if (usuario == null || usuario.Senha != senha)
             {

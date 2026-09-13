@@ -95,17 +95,15 @@ namespace FCG.Users.Application.Services
             _repository.Alterar(usuario);
         }
 
-        public Usuario? ObterPorEmail(string email)
+        public async Task<Usuario?> ObterPorEmail(string email)
         {
 
             // Como existe o campo situação é necessário buscar por e-mail e pela situação Ativo.
-
             var usuarios = _repository.ObterTodos();
-
-            var usuario = usuarios.Where(ent => ent.Situacao == "Ativo" && ent.Email == email)
-                .FirstOrDefault();
+            var usuario = usuarios.Where(u => u.Situacao == "Ativo" && u.Email == email).FirstOrDefault();
 
             return usuario;
+
         }
 
         public Usuario? ObterPorId(int id)

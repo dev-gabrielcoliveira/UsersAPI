@@ -1,6 +1,7 @@
 ﻿
 
 using FCG.Users.Application.Interfaces.Base;
+using System.Linq.Expressions;
 
 namespace FCG.Users.Application.Interfaces
 {
@@ -8,6 +9,7 @@ namespace FCG.Users.Application.Interfaces
     {
 
         void Alterar(T entidade);
+        Task<T?> ObterPrimeiroAsync(Expression<Func<T, bool>> predicate);
 
         IList<T> ObterTodos();
 

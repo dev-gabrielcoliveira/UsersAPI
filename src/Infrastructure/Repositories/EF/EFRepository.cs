@@ -3,6 +3,7 @@ using FCG.Users.Application.Interfaces.Base;
 using FCG.Users.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace FCG.Users.Infrastructure.Repositories.EF
 {
@@ -42,6 +43,9 @@ namespace FCG.Users.Infrastructure.Repositories.EF
 
         public T? ObterPorId(int id)
             => _dbSet.FirstOrDefault(entity => entity.Id == id);
+
+        public async Task<T?> ObterPrimeiroAsync(Expression<Func<T, bool>> predicate)
+            => await _dbSet.FirstOrDefaultAsync(predicate);
 
         public IList<T> ObterTodos()
             => _dbSet.ToList();
