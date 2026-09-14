@@ -22,12 +22,12 @@ Ele responde pelo cadastro de novos jogadores, autenticação segura (JWT), gest
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **.NET 8** (ASP.NET Core Web API)
-- **Entity Framework Core** & **SQL Server**
-- **ASP.NET Core Identity** / **JWT** (Autenticação)
-- **MassTransit** & **RabbitMQ**
-- **Docker** & **Kubernetes**
-- **Serilog** (Logs estruturados)
+- .NET 8 (ASP.NET Core Web API)
+- Entity Framework Core & SQL Server
+- MassTransit & RabbitMQ (Eventos de domínio)
+- Azure Storage Queues & Azure Functions (Processamento de notificações)
+- Docker & Kubernetes
+- Serilog, Prometheus & Grafana (Observabilidade)
 
 ---
 
@@ -71,7 +71,7 @@ Os manifestos Kubernetes estão disponíveis na pasta: k8s
 
 A aplicação utiliza Serilog para geração de logs estruturados em console.
 
-Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nativos do cluster. E é Monitorada através do Grafana e do Prometheus
+Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nativos do cluster. E é Monitorada através dos Dashboards do Grafana e das métricas do Prometheus
 
 ## Objetivo do serviço
 
