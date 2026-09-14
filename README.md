@@ -85,4 +85,4 @@ Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nat
 
 ## Objetivo do serviço
 
-A Users.API representa o microsserviço responsável pelo catálogo de jogos e pela criação e manutenção dos usuários, quando o usuário é criado é disparado uma Azure Function através de um Serveless para notificar a criação do usuário evitando assim Pods ociosos.
+A Users.API representa o microsserviço responsável pela manutanção do cadastro de usuários e autrnticação dos usuários, quando o usuário é criado é disparado uma Azure Function através de um Serveless para notificar a criação do usuário evitando assim Pods ociosos.
