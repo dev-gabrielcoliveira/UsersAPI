@@ -40,16 +40,6 @@ O projeto adota Clean Architecture com separação clara de responsabilidades:
 - **Domain:** Entidades de usuário, regras de negócio e contratos de eventos.
 - **Infrastructure:** Persistência de dados (EF Core), configuração do Identity e integrações externas.
 
----
-
-## 🔄 Mensageria e Eventos de Domínio
-
-O **UsersAPI** integra-se ao barramento **RabbitMQ** para notificar outros microsserviços sobre eventos de ciclo de vida do usuário.
-
-```text
-[UsersAPI] --(RabbitMQ: UserCreatedEvent)--> [CatalogAPI / PaymentsAPI / NotificationsAPI]
-```
-
 ## Banco de Dados
 
 O serviço utiliza:
@@ -85,4 +75,4 @@ Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nat
 
 ## Objetivo do serviço
 
-A Users.API representa o microsserviço responsável pela manutanção do cadastro de usuários e autrnticação dos usuários, quando o usuário é criado é disparado uma Azure Function através de um Serveless para notificar a criação do usuário evitando assim Pods ociosos.
+A UsersAPI representa o microsserviço responsável pela manutenção do cadastro e autenticação de usuários. Ao cadastrar um novo usuário, o RabbitMQ foi substituído por uma fila no Azure Storage Queue que aciona uma Azure Function serverless para o envio de notificações, garantindo menor consumo de recursos e evitando pods ociosos na infraestrutura
