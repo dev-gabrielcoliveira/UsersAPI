@@ -3,7 +3,6 @@ using FCG.Users.Application.Interfaces.Services;
 using FCG.Users.Application.Services;
 using FCG.Users.Infrastructure.Persistence;
 using FCG.Users.Infrastructure.Repositories;
-using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -12,6 +11,7 @@ using Serilog;
 using System.Reflection;
 using System.Text;
 using Prometheus;
+using Azure.Storage.Queues;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +27,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("UsuariosConnection"),
         sqlServerOptions => sqlServerOptions.MigrationsHistoryTable("migrations_usuarios"));
 });
+
+// Registra o QueueServiceClient no Container de Injeção de Dependências
+builder.Services.AddSingleton(x => 
+    new QueueServiceClient(builder.Configuration.GetConnectionString("AzureWebJobsStorage")));
 
 string key = builder.Configuration["Jwt:Key"] ?? "";
 
@@ -100,23 +104,6 @@ builder.Services.AddScoped<UsuarioService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddMassTransit(busRegistration =>
-{
-    busRegistration.UsingRabbitMq((context, cfg) =>
-    {
-        var rabbitHost = builder.Configuration["RabbitMq:Host"] ?? "localhost";
-
-        cfg.Host(rabbitHost, "/", hostConfigurator =>
-        {
-            hostConfigurator.Username("guest");
-            hostConfigurator.Password("guest");
-        });
-
-        cfg.UseRawJsonSerializer();
-        cfg.ConfigureEndpoints(context);
-    });
-});
 
 var app = builder.Build();
 // Captura todas requisições que entram na API

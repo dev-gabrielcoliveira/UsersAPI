@@ -1,9 +1,10 @@
-﻿using FCG.Users.Application.DTOs;
+﻿using Azure.Storage.Queues;
+using FCG.Users.Application.DTOs;
 using FCG.Users.Application.Interfaces.Repository;
-using FCG.Users.Domain.Entities;
 using FCG.Users.Application.Validators;
-using MassTransit;
-using FCG.Application.Events;
+using FCG.Users.Domain.Entities;
+using System.Text;
+using System.Text.Json;
 
 namespace FCG.Users.Application.Services
 {
@@ -11,16 +12,16 @@ namespace FCG.Users.Application.Services
     {
         private readonly IUsuarioRepository _repository;
         private readonly UsuarioValidators _validator;
-        private readonly IPublishEndpoint _publichEndpoint;
+        private readonly QueueServiceClient _queueServiceClient;
 
         public UsuarioService(
             IUsuarioRepository repository,
-            IPublishEndpoint publichEndpoint
+            QueueServiceClient queueServiceClient
         )
         {
             _repository = repository;
-            _publichEndpoint = publichEndpoint;
             _validator = new UsuarioValidators();
+            _queueServiceClient = queueServiceClient;
 
         }
 
@@ -28,19 +29,19 @@ namespace FCG.Users.Application.Services
         {
 
             if (!_validator.EmailValido(usuario.Email))
-                throw new Exception("Email inválido");
+                throw new ArgumentException("Email inválido");
 
             if (!_validator.SenhaValida(usuario.Senha))
-                throw new Exception("Senha fraca");
+                throw new ArgumentException("Senha fraca");
 
             if (!_validator.TamanhoMaximo(usuario.Nome, 50))
-                throw new Exception("Nome excede o tamanho máximo");
+                throw new ArgumentException("Nome excede o tamanho máximo");
 
             if (!_validator.TamanhoMaximo(usuario.Email, 100))
-                throw new Exception("E-mail excede o tamanho máximo");
+                throw new ArgumentException("E-mail excede o tamanho máximo");
 
             if (!_validator.TamanhoMaximo(usuario.Senha, 32))
-                throw new Exception("Senha excede o tamanho máximo");
+                throw new ArgumentException("Senha excede o tamanho máximo");
 
             _repository.Alterar(usuario);
 
@@ -49,19 +50,19 @@ namespace FCG.Users.Application.Services
         public async Task<Usuario> Criar(UsuarioCriarInput input)
         {
             if (!_validator.EmailValido(input.Email))
-                throw new Exception("Email inválido");
+                throw new ArgumentException("Email inválido");
 
             if (!_validator.SenhaValida(input.Senha))
-                throw new Exception("Senha fraca");
+                throw new ArgumentException("Senha fraca");
 
             if (!_validator.TamanhoMaximo(input.Nome, 50))
-                throw new Exception("Nome excede o tamanho máximo");
+                throw new ArgumentException("Nome excede o tamanho máximo");
 
             if (!_validator.TamanhoMaximo(input.Email, 100))
-                throw new Exception("E-mail excede o tamanho máximo");
+                throw new ArgumentException("E-mail excede o tamanho máximo");
 
             if (!_validator.TamanhoMaximo(input.Senha, 32))
-                throw new Exception("Senha excede o tamanho máximo");
+                throw new ArgumentException("Senha excede o tamanho máximo");
 
             var usuario = new Usuario
             {
@@ -73,12 +74,16 @@ namespace FCG.Users.Application.Services
 
             _repository.Cadastrar(usuario);
 
-            await _publichEndpoint.Publish(
-                new UserCreatedEvent(
-                    usuario.Id,
-                    usuario.Nome,
-                    usuario.Email
-                ));
+            string mensagem = $"{input.Email}|Bem-vindo!|Olá {input.Nome}, seu usuário foi criado com sucesso.";
+
+            var queueClient = new QueueClient(
+                "UseDevelopmentStorage=true",
+                "notifications-v3",
+                new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 }
+            );
+
+            await queueClient.CreateIfNotExistsAsync();
+            await queueClient.SendMessageAsync(mensagem);
 
             return usuario;
         }
@@ -99,8 +104,7 @@ namespace FCG.Users.Application.Services
         {
 
             // Como existe o campo situação é necessário buscar por e-mail e pela situação Ativo.
-            var usuarios = _repository.ObterTodos();
-            var usuario = usuarios.Where(u => u.Situacao == "Ativo" && u.Email == email).FirstOrDefault();
+            var usuario = _repository.ObterTodos().Where(u => u.Situacao == "Ativo" && u.Email == email).FirstOrDefault();
 
             return usuario;
 
