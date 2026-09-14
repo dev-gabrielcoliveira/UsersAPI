@@ -1,77 +1,58 @@
 # UsersAPI
 
-Microsserviço responsável pelo gerenciamento de usuários da plataforma FIAP Cloud Games (FCG).
+> Microsserviço responsável pelo gerenciamento de usuários, autenticação e controle de perfis da plataforma FIAP Cloud Games (FCG).
 
-## Sobre o projeto
+---
 
-O UsersAPI é responsável pelo cadastro, autenticação e autorização dos usuários da plataforma.
+## 💡 Sobre o projeto
 
-O serviço foi desenvolvido seguindo uma arquitetura de microsserviços, permitindo evolução independente dos componentes e comunicação assíncrona através de eventos.
+O **UsersAPI** é o microsserviço centralizador de identidade da plataforma FIAP Cloud Games (FCG). 
 
-## Responsabilidades
+Ele responde pelo cadastro de novos jogadores, autenticação segura (JWT), gestão de perfil e disponibilização de dados cadastrais para os demais microsserviços do ecossistema.
 
-- Cadastro de usuários
-- Consulta de usuários
-- Autenticação utilizando JWT
-- Autorização baseada em perfil
-- Publicação de eventos de domínio
+---
 
-## Tecnologias utilizadas
+## 🎯 Responsabilidades
 
-- .NET 8
-- ASP.NET Core Web API
-- Entity Framework Core
-- SQL Server
-- JWT Bearer Authentication
-- MassTransit
-- RabbitMQ
-- Docker
-- Kubernetes
+- **Gestão de Usuários:** Cadastro, atualização de dados cadastrais e consulta de perfis.
+- **Autenticação e Autorização:** Autenticação via JWT (JSON Web Tokens) e controle de permissões.
+- **Eventos de Domínio:** Emissão de eventos relacionados ao ciclo de vida do usuário (ex: cadastro realizado).
 
-## Arquitetura
+---
 
-O projeto possui separação de responsabilidades:
+## 🛠️ Tecnologias Utilizadas
 
-- **API**
-  - Controllers
-  - Endpoints HTTP
+- **.NET 8** (ASP.NET Core Web API)
+- **Entity Framework Core** & **SQL Server**
+- **ASP.NET Core Identity** / **JWT** (Autenticação)
+- **MassTransit** & **RabbitMQ**
+- **Docker** & **Kubernetes**
+- **Serilog** (Logs estruturados)
 
-- **Application**
-  - Casos de uso
-  - Serviços da aplicação
-  - Eventos
+---
 
-- **Domain**
-  - Entidades
-  - Regras de negócio
+## 🏗️ Arquitetura Interna
 
-- **Infrastructure**
-  - Persistência
-  - Repositórios
-  - Configurações externas
+O projeto adota Clean Architecture com separação clara de responsabilidades:
 
-## Mensageria
+- **API:** Controllers, endpoints de autenticação/cadastro e middlewares de autorização.
+- **Application:** Casos de uso, DTOs, validações e serviços de token.
+- **Domain:** Entidades de usuário, regras de negócio e contratos de eventos.
+- **Infrastructure:** Persistência de dados (EF Core), configuração do Identity e integrações externas.
 
-Após o cadastro de um usuário, o serviço publica o evento:
+---
 
-Fluxo:
+## 🔄 Mensageria e Eventos de Domínio
+
+O **UsersAPI** integra-se ao barramento **RabbitMQ** para notificar outros microsserviços sobre eventos de ciclo de vida do usuário.
 
 ```text
-UsersAPI
-    |
-    | UserCreatedEvent
-    ↓
-RabbitMQ
-    ↓
-NotificationsAPI
+[UsersAPI] --(RabbitMQ: UserCreatedEvent)--> [CatalogAPI / PaymentsAPI / NotificationsAPI]
 ```
-
-O evento é consumido pelo NotificationsAPI para simular o envio de e-mail de boas-vindas ao usuário cadastrado.
 
 ## Banco de Dados
 
 O serviço utiliza:
-
 
 A persistência é realizada utilizando Entity Framework Core e migrations para controle da evolução do banco.
 
@@ -94,4 +75,4 @@ Benefícios:
 
 ## Kubernetes
 
-Os manifestos Kubernetes estão disponíveis na pasta:
+Os manifestos Kubernetes estão disponíveis na pasta: k8s
