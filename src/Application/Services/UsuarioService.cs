@@ -74,7 +74,7 @@ namespace FCG.Users.Application.Services
 
             _repository.Cadastrar(usuario);
 
-            string mensagem = $"{input.Email}|Bem-vindo!|Olá {input.Nome}, seu usuário foi criado com sucesso.";
+            string mensagem = $"{input.Email} | Bem-vindo! |Olá {input.Nome}, seu usuário foi criado com sucesso.";
 
             var queueClient = new QueueClient(
                 "UseDevelopmentStorage=true",
