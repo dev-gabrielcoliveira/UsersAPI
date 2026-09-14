@@ -76,3 +76,13 @@ Benefícios:
 ## Kubernetes
 
 Os manifestos Kubernetes estão disponíveis na pasta: k8s
+
+## Observabilidade
+
+A aplicação utiliza Serilog para geração de logs estruturados em console.
+
+Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nativos do cluster. E é Monitorada através do Grafana e do Prometheus
+
+## Objetivo do serviço
+
+A Users.API representa o microsserviço responsável pelo catálogo de jogos e pela criação e manutenção dos usuários, quando o usuário é criado é disparado uma Azure Function através de um Serveless para notificar a criação do usuário evitando assim Pods ociosos.
