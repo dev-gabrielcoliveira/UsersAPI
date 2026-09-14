@@ -71,7 +71,7 @@ Os manifestos Kubernetes estão disponíveis na pasta: k8s
 
 A aplicação utiliza Serilog para geração de logs estruturados em console.
 
-Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nativos do cluster. E é Monitorada através dos Dashboards do Grafana e das métricas do Prometheus
+Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nativos do cluster. E além disso ainda existe um endpoint exposto para acompanhar os dashboards do Grafana através das métricas do Prometheus
 
 ## Objetivo do serviço
 
