@@ -1,77 +1,48 @@
 # UsersAPI
 
-Microsserviço responsável pelo gerenciamento de usuários da plataforma FIAP Cloud Games (FCG).
+> Microsserviço responsável pelo gerenciamento de usuários, autenticação e controle de perfis da plataforma FIAP Cloud Games (FCG).
 
-## Sobre o projeto
+---
 
-O UsersAPI é responsável pelo cadastro, autenticação e autorização dos usuários da plataforma.
+## 💡 Sobre o projeto
 
-O serviço foi desenvolvido seguindo uma arquitetura de microsserviços, permitindo evolução independente dos componentes e comunicação assíncrona através de eventos.
+O **UsersAPI** é o microsserviço centralizador de identidade da plataforma FIAP Cloud Games (FCG). 
 
-## Responsabilidades
+Ele responde pelo cadastro de novos jogadores, autenticação segura (JWT), gestão de perfil e disponibilização de dados cadastrais para os demais microsserviços do ecossistema.
 
-- Cadastro de usuários
-- Consulta de usuários
-- Autenticação utilizando JWT
-- Autorização baseada em perfil
-- Publicação de eventos de domínio
+---
 
-## Tecnologias utilizadas
+## 🎯 Responsabilidades
 
-- .NET 8
-- ASP.NET Core Web API
-- Entity Framework Core
-- SQL Server
-- JWT Bearer Authentication
-- MassTransit
-- RabbitMQ
-- Docker
-- Kubernetes
+- **Gestão de Usuários:** Cadastro, atualização de dados cadastrais e consulta de perfis.
+- **Autenticação e Autorização:** Autenticação via JWT (JSON Web Tokens) e controle de permissões.
+- **Eventos de Domínio:** Emissão de eventos relacionados ao ciclo de vida do usuário (ex: cadastro realizado).
 
-## Arquitetura
+---
 
-O projeto possui separação de responsabilidades:
+## 🛠️ Tecnologias Utilizadas
 
-- **API**
-  - Controllers
-  - Endpoints HTTP
+- .NET 8 (ASP.NET Core Web API)
+- Entity Framework Core & SQL Server
+- MassTransit & RabbitMQ (Eventos de domínio)
+- Azure Storage Queues & Azure Functions (Processamento de notificações)
+- Docker & Kubernetes
+- Serilog, Prometheus & Grafana (Observabilidade)
 
-- **Application**
-  - Casos de uso
-  - Serviços da aplicação
-  - Eventos
+---
 
-- **Domain**
-  - Entidades
-  - Regras de negócio
+## 🏗️ Arquitetura Interna
 
-- **Infrastructure**
-  - Persistência
-  - Repositórios
-  - Configurações externas
+O projeto adota Clean Architecture com separação clara de responsabilidades:
 
-## Mensageria
-
-Após o cadastro de um usuário, o serviço publica o evento:
-
-Fluxo:
-
-```text
-UsersAPI
-    |
-    | UserCreatedEvent
-    ↓
-RabbitMQ
-    ↓
-NotificationsAPI
-```
-
-O evento é consumido pelo NotificationsAPI para simular o envio de e-mail de boas-vindas ao usuário cadastrado.
+- **API:** Controllers, endpoints de autenticação/cadastro e middlewares de autorização.
+- **Application:** Casos de uso, DTOs, validações e serviços de token.
+- **Domain:** Entidades de usuário, regras de negócio e contratos de eventos.
+- **Infrastructure:** Persistência de dados (EF Core), configuração do Identity e integrações externas.
 
 ## Banco de Dados
 
 O serviço utiliza:
-
 
 A persistência é realizada utilizando Entity Framework Core e migrations para controle da evolução do banco.
 
@@ -94,4 +65,14 @@ Benefícios:
 
 ## Kubernetes
 
-Os manifestos Kubernetes estão disponíveis na pasta:
+Os manifestos Kubernetes estão disponíveis na pasta: k8s
+
+## Observabilidade
+
+A aplicação utiliza Serilog para geração de logs estruturados em console.
+
+Em ambiente Kubernetes os logs podem ser acompanhados utilizando os recursos nativos do cluster. E além disso ainda existe um endpoint exposto para acompanhar os dashboards do Grafana através das métricas do Prometheus
+
+## Objetivo do serviço
+
+A UsersAPI representa o microsserviço responsável pela manutenção do cadastro e autenticação de usuários. Ao cadastrar um novo usuário, o RabbitMQ foi substituído por uma fila no Azure Storage Queue que aciona uma Azure Function serverless para o envio de notificações, garantindo menor consumo de recursos e evitando pods ociosos na infraestrutura
