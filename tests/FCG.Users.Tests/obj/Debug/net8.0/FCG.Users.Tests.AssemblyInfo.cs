@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FCG.Users.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+67aa3cc26e32297c9b057951d3cf0539ef8abf72")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c99a41979c63040088cf8ca4134adf4eea5ad42a")]
 [assembly: System.Reflection.AssemblyProductAttribute("FCG.Users.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FCG.Users.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
